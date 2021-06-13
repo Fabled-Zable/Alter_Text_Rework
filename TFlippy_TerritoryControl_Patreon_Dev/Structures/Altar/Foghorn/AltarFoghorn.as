@@ -3,6 +3,7 @@
 #include "ShopCommon.as";
 #include "DeityCommon.as";
 #include "MakeSeed.as";
+#include "AltarStats.as";
 
 void onInit(CBlob@ this)
 {
@@ -81,7 +82,7 @@ void onTick(CBlob@ this)
 	const bool client = isClient();
 
 	const f32 reputation = this.get_f32("deity_power");
-	this.setInventoryName("Altar of Foghorn\n\nUPF Reputation: " + reputation + "\n");
+	this.set_string("stats","UPF Reputation: " + reputation + "\n");
 	
 	if (this.getTickSinceCreated() % 30 == 0)
 	{
@@ -100,6 +101,16 @@ void onTick(CBlob@ this)
 			this.set_u32("next_shelling", getGameTime() + (30 * 120));
 		}
 	}
+}
+
+void onRender(CSprite@ this)
+{
+	CBlob@ b = this.getBlob();
+	if(b is null)
+	{
+		return;
+	}
+	DrawStats(b,b.get_string("stats"));
 }
 
 void onCommand(CBlob@ this, u8 cmd, CBitStream @params)

@@ -6,6 +6,7 @@
 #include "HittersTC.as";
 #include "DeityCommon.as";
 #include "RgbStuff.as";
+#include "AltarStats.as";
 
 const SColor[] colors =
 {
@@ -113,7 +114,7 @@ void onTick(CSprite@ this)
 	const f32 power = blob.get_f32("deity_power");
 	const f32 radius = 64.00f + Maths::Sqrt(power);
 
-	blob.setInventoryName("Altar of Ivan\n\nIvanic Power: " + power + "\nRadius: " + int(radius / 8.00f));
+	blob.set_string("stats", "Ivanic Power: " + power + "\nRadius: " + int(radius / 8.00f));
 
 	CBlob@ localBlob = getLocalPlayerBlob();
 	if (blob.hasTag("colourful") && localBlob !is null)
@@ -295,6 +296,16 @@ void onCommand(CBlob@ this, u8 cmd, CBitStream @params)
 			}
 		}
 	}
+}
+
+void onRender(CSprite@ this)
+{
+	CBlob@ b = this.getBlob();
+	if(b is null)
+	{
+		return;
+	}
+	DrawStats(b,b.get_string("stats"));
 }
 
 void Zap(CBlob@ this, CBlob@ target)

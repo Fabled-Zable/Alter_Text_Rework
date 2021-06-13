@@ -4,6 +4,7 @@
 #include "DeityCommon.as";
 #include "MakeMat.as";
 #include "Explosion.as";
+#include "AltarStats.as";
 
 void onInit(CBlob@ this)
 {
@@ -120,7 +121,7 @@ void onTick(CBlob@ this)
 		// text += "\n";
 		// text += "\nSell Price: " + Maths::Ceil(stonks_value) + " coins";
 		// text += "\nBuy Price: " + Maths::Ceil(stonks_value * 0.98f) + " coins";
-		this.setInventoryName(text);
+		this.set_string("stats",text);
 		
 		const f32 radius = 64.00f + ((power / 100.00f) * 8.00f);
 		this.SetLightRadius(radius);
@@ -400,6 +401,13 @@ f32 axis_y = 90;
 
 void onRender(CSprite@ this)
 {
+	CBlob@ b = this.getBlob();
+	if(b is null)
+	{
+		return;
+	}
+	DrawStats(b,b.get_string("stats"));
+
 	CBlob@ localBlob = getLocalPlayerBlob();
 	if (localBlob !is null)
 	{

@@ -2,9 +2,13 @@
 #include "Requirements_Tech.as";
 #include "ShopCommon.as";
 #include "DeityCommon.as";
+#include "AltarStats.as";
 
 void onInit(CBlob@ this)
 {
+	AltarStatsInit(this);
+
+
 	this.set_u8("deity_id", Deity::cocok);
 	this.set_Vec2f("shop menu size", Vec2f(4, 2));
 
@@ -91,6 +95,16 @@ void onInit(CBlob@ this)
 	// }
 }
 
+void onRender(CSprite@ this)
+{
+	CBlob@ b = this.getBlob();
+	if(b is null)
+	{
+		return;
+	}
+	DrawStats(b,b.get_string("stats"));
+}
+
 void onTick(CSprite@ this)
 {
 	CBlob@ blob = this.getBlob();
@@ -100,7 +114,8 @@ void onTick(CSprite@ this)
 	const f32 radius = 64.00f + ((power / 100.00f) * 8.00f);
 	const f32 gravity = sv_gravity * 0.03f;
 	
-	blob.setInventoryName("Altar of Cocok\n\nRussian Power: " + power + "\nGravitation field radius: " + radius);
+	blob.set_string("stats", "Altar of Cocok\n\nRussian Power: " + power + "\nGravitation field radius: " + radius);
+
 	blob.SetLightRadius(radius);
 
 	CBlob@ localBlob = getLocalPlayerBlob();

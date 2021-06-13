@@ -2,6 +2,7 @@
 #include "Requirements_Tech.as";
 #include "ShopCommon.as";
 #include "DeityCommon.as";
+#include "AltarStats.as";
 
 const f32 radius = 128.0f;
 	
@@ -74,7 +75,7 @@ void onTick(CSprite@ this)
 	if (blob is null) return;
 	
 	const f32 power = blob.get_f32("deity_power");
-	blob.setInventoryName("Altar of Mithrios\n\nDemonic Power: " + power + "\nDamage Reflection: " + (power * 0.01f) + "%");
+	blob.set_string("stats","Demonic Power: " + power + "\nDamage Reflection: " + (power * 0.01f) + "%");
 	
 	CBlob@ playerBlob = getLocalPlayerBlob();
 	if (playerBlob !is null)
@@ -122,6 +123,16 @@ void onTick(CSprite@ this)
 			}
 		}
 	}
+}
+
+void onRender(CSprite@ this)
+{
+	CBlob@ b = this.getBlob();
+	if(b is null)
+	{
+		return;
+	}
+	DrawStats(b,b.get_string("stats"));
 }
 
 void onCommand(CBlob@ this, u8 cmd, CBitStream @params)

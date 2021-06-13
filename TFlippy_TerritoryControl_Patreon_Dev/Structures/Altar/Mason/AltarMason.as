@@ -2,7 +2,7 @@
 #include "Requirements_Tech.as";
 #include "ShopCommon.as";
 #include "DeityCommon.as";
-
+#include "AltarStats.as";
 void onInit(CBlob@ this)
 {
 	this.set_u8("deity_id", Deity::mason);
@@ -38,7 +38,17 @@ void onTick(CSprite@ this)
 	if (blob is null) return;
 
 	const f32 power = blob.get_f32("deity_power");
-	blob.setInventoryName("Altar of Grand Mason\n\nMasonic Power: " + power + "\nFree block chance: " + Maths::Min((power * 0.01f),MAX_FREE_BLOCK_CHANCE) + "%");
+	blob.set_string("stats", "Masonic Power: " + power + "\nFree block chance: " + Maths::Min((power * 0.01f),MAX_FREE_BLOCK_CHANCE) + "%");
+}
+
+void onRender(CSprite@ this)
+{
+	CBlob@ b = this.getBlob();
+	if(b is null)
+	{
+		return;
+	}
+	DrawStats(b,b.get_string("stats"));
 }
 
 void onCommand(CBlob@ this, u8 cmd, CBitStream @params)

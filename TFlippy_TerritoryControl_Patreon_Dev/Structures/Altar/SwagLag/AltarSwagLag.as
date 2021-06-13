@@ -3,6 +3,7 @@
 #include "ShopCommon.as";
 #include "DeityCommon.as";
 #include "MakeSeed.as";
+#include "AltarStats";
 
 void onInit(CBlob@ this)
 {
@@ -74,12 +75,21 @@ void onTick(CBlob@ this)
 	const bool client = isClient();
 
 	const f32 power = this.get_f32("deity_power");
-	this.setInventoryName("Altar of SwagLag\n\nMLG Power: " + power + "\nGun damage bonus: +" + Maths::Min(power * 0.010f, 200.00f) + "%");
+	
+	this.set_string("stats","MLG Power: " + power + "\nGun damage bonus: +" + Maths::Min(power * 0.010f, 200.00f) + "%");
 	
 	const f32 radius = 64.00f + ((power / 100.00f) * 8.00f);
 	this.SetLightRadius(radius);
 }
-
+void onRender(CSprite@ this)
+{
+	CBlob@ b = this.getBlob();
+	if(b is null)
+	{
+		return;
+	}
+	DrawStats(b,b.get_string("stats"));
+}
 void onCommand(CBlob@ this, u8 cmd, CBitStream @params)
 {
 	if (cmd == this.getCommandID("shop made item"))
